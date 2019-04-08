@@ -1,0 +1,566 @@
+SQL> set echo on;
+SQL> set linesize 1000;
+SQL> set pagesize 1000;
+SQL> set heading on;
+SQL> 
+SQL> --- Assignment3
+SQL> 
+SQL> ----1
+SQL> select ven_name, evt_date_time, stf_name, to_char(ws_start_time,'HH:MI AM') as "Start Time", to_char(ws_end_time, 'HH:MI AM') as "End Time", ws_role
+  2  from MIS3376.event join MIS3376.venue on event.evt_venue_id=venue.ven_id
+  3                     join MIS3376.work_schedule on work_schedule.ws_evt_no=event.evt_no
+  4                     join MIS3376.sxsw_staff on work_schedule.ws_stf_id=sxsw_staff.stf_id
+  5  where to_date(evt_date_time) <> to_date('18-MAR-15')
+  6  order by 2,3 asc;
+
+VEN_NAME                                           EVT_DATE_ STF_NAME                  Start Ti End Time WS_ROLE                  
+-------------------------------------------------- --------- ------------------------- -------- -------- -------------------------
+Elephant Room                                      19-MAR-15 Julio Montango T.         05:00 PM 11:00 PM Event Supervisor         
+Elephant Room                                      19-MAR-15 Ada Lovelace Z.           06:00 PM 11:00 PM Event Staff              
+Stubs                                              19-MAR-15 Christine Nguyen H..      06:00 PM 11:00 PM Event Staff              
+ACL Live at the Moody Theater                      19-MAR-15 Danny Jimenez R.          06:00 PM 11:00 PM Event Staff              
+Elephant Room                                      19-MAR-15 David Ferety U.           06:00 PM 11:00 PM Event Coordinatior       
+Victorian Room at The Driskill                     19-MAR-15 Dee Jones R.              06:00 PM 10:00 PM Event Staff              
+Stubs                                              19-MAR-15 Donna Murphy C.           06:00 PM 11:00 PM Event Coordinatior       
+Emo"s                                              19-MAR-15 Ginger Murphy             06:00 PM 10:00 PM Event Coordinatior       
+Victorian Room at The Driskill                     19-MAR-15 Larry Johnson G.          06:00 PM 10:00 PM Event Staff              
+Stubs                                              19-MAR-15 Dave Mathews L.           06:30 PM 10:30 PM Event Coordinatior       
+Stubs                                              19-MAR-15 Jeffery Bezos T.          06:30 PM 10:30 PM Unher                    
+Austin Convention Center                           19-MAR-15 Mary Smith K.             06:30 PM 10:30 PM Event Staff              
+Stubs                                              19-MAR-15 Thomas Kahn U.            06:30 PM 10:30 PM Event Staff              
+Austin Convention Center                           19-MAR-15 Tim Cooke M.              06:30 PM 10:30 PM Security Coordinator     
+Central Presbyterian Church                        20-MAR-15 Charles Babbage L.        04:00 PM 10:00 PM Usher                    
+Central Presbyterian Church                        20-MAR-15 Christine Nguyen H..      04:00 PM 10:00 PM Event Staff              
+Central Presbyterian Church                        20-MAR-15 Larry Johnson G.          04:00 PM 10:00 PM Event Staff              
+Elephant Room                                      20-MAR-15 Danny Jimenez R.          06:00 PM 11:00 PM Event Coordinatior       
+Elephant Room                                      20-MAR-15 Ginger Murphy             06:00 PM 11:00 PM Event Coordinatior       
+Elephant Room                                      20-MAR-15 Jeffery Bezos T.          06:00 PM 11:00 PM Usher                    
+ACL Live at the Moody Theater                      20-MAR-15 Dave Mathews L.           06:00 PM 11:30 PM Event Coordinatior       
+Emo"s                                              20-MAR-15 Donna Murphy C.           06:00 PM 10:00 PM Event Coordinatior       
+Emo"s                                              20-MAR-15 Julio Montango T.         06:00 PM 10:00 PM Event Supervisor         
+ACL Live at the Moody Theater                      20-MAR-15 Mary Smith K.             06:00 PM 11:30 PM Event Staff              
+Central Presbyterian Church                        21-MAR-15 Alan Turing P.            04:00 PM 10:00 PM Usher                    
+Central Presbyterian Church                        21-MAR-15 Julio Montango T.         04:00 PM 10:00 PM Event Supervisor         
+Elephant Room                                      21-MAR-15 Ada Lovelace Z.           05:00 PM 11:00 PM Event Staff              
+Elephant Room                                      21-MAR-15 Danny Jimenez R.          05:00 PM 11:00 PM Event Staff              
+ACL Live at the Moody Theater                      21-MAR-15 Donna Murphy C.           05:00 PM 10:00 PM Event Coordinatior       
+Elephant Room                                      21-MAR-15 Mary Smith K.             05:00 PM 11:00 PM Event Staff              
+ACL Live at the Moody Theater                      21-MAR-15 Tim Cooke M.              05:00 PM 10:00 PM Security Coordinatior    
+Victorian Room at The Driskill                     21-MAR-15 Charles Babbage L.        06:00 PM 11:00 PM Usher                    
+Austin Convention Center                           21-MAR-15 Dave Mathews L.           06:00 PM 11:30 PM Event Coordinatior       
+Stubs                                              21-MAR-15 David Ferety U.           06:00 PM 11:00 PM Event Coordinatior       
+The Velveeta Room                                  21-MAR-15 Dee Jones R.              06:00 PM 11:00 PM Event Staff              
+Victorian Room at The Driskill                     21-MAR-15 Julio Montango T.         06:00 PM 11:00 PM Event Coordinatior       
+The Velveeta Room                                  21-MAR-15 Larry Johnson G.          06:00 PM 11:00 PM Event Staff              
+Austin Convention Center                           21-MAR-15 Mary Smith K.             06:00 PM 11:30 PM Event Coordinatior       
+Stubs                                              21-MAR-15 Thomas Kahn U.            06:00 PM 11:00 PM Event Staff              
+Victorian Room at The Driskill                     21-MAR-15 William Gates T.          06:00 PM 11:00 PM Head Usher               
+Elephant Room                                      21-MAR-15 Christine Nguyen H..      06:30 PM 10:30 PM Event Staff              
+Elephant Room                                      21-MAR-15 Ginger Murphy             06:30 PM 10:30 PM Event Coordinatior       
+Elephant Room                                      21-MAR-15 Jeffery Bezos T.          06:30 PM 10:30 PM Usher                    
+
+43 rows selected. 
+
+SQL> 
+SQL> ----2
+SQL> select bnd_name, sum(bnd_fee)
+  2  from MIS3376.band left outer join MIS3376.event on band.bnd_id=event.evt_bnd_id
+  3  where evt_bnd_id is not null
+  4  group by bnd_name;
+
+BND_NAME                                           SUM(BND_FEE)
+-------------------------------------------------- ------------
+The Lunineers                                            200000
+Lady Gaga                                               1500000
+Florence and the Machine                                 900000
+The Doors                                                 50000
+Paul McCartney                                          1500000
+Fall Out Boy                                             200000
+Mumfort and Sons                                         500000
+Katy Perry                                              1500000
+John Mayer                                              1500000
+Sam Smith                                                100000
+Beyonce                                                 2000000
+Iron and Wine                                            100000
+Taylor Swift                                            4000000
+The Who                                                  500000
+Maroon 5                                                 550000
+Bruno Mars                                              2000000
+
+16 rows selected. 
+
+SQL> 
+SQL> ----3
+SQL> select stf_name, stf_salary, round(stf_salary - (select avg(stf_salary) from MIS3376.sxsw_staff),0) as "Computed Difference"
+  2  from MIS3376.sxsw_staff
+  3  order by 1 asc;
+
+STF_NAME                  STF_SALARY Computed Difference
+------------------------- ---------- -------------------
+Ada Lovelace Z.                 2500                 261
+Alan Turing P.                  2500                 261
+Charles Babbage L.              2195                 -44
+Christine Nguyen H..            1500                -739
+Danny Jimenez R.                2000                -239
+Dave Mathews L.                 1250                -989
+David Ferety U.                 1900                -339
+Dee Jones R.                     800               -1439
+Donna Murphy C.                 2000                -239
+Ginger Murphy                   2650                 411
+Jeffery Bezos T.                7500                5261
+Julio Montango T.               3400                1161
+Larry Johnson G.                2500                 261
+Mary Smith K.                   2149                 -90
+Mohammed Bang M.                1535                -704
+Samual Yu N.                    1260                -979
+Thomas Kahn U.                  2050                -189
+Tim Cooke M.                    1950                -289
+William Gates T.                 900               -1339
+
+19 rows selected. 
+
+SQL> 
+SQL> ----4
+SQL> select bnd_name, count(bnd_id) as "# Events"
+  2  from MIS3376.band join MIS3376.event on band.bnd_id=event.evt_bnd_id
+  3  group by bnd_name
+  4  UNION
+  5  select bnd_name, count(evt_bnd_id)
+  6  from MIS3376.band left outer join MIS3376.event on band.bnd_id=event.evt_bnd_id
+  7  where evt_bnd_id is null
+  8  group by bnd_name;
+
+BND_NAME                                             # Events
+-------------------------------------------------- ----------
+Beyonce                                                     1
+Bruno Mars                                                  2
+Fall Out Boy                                                1
+Florence and the Machine                                    2
+Iron and Wine                                               2
+John Mayer                                                  2
+Katy Perry                                                  1
+Lady Gaga                                                   1
+Lyle Lovett and His Large Band                              0
+Maroon 5                                                    1
+Mumfort and Sons                                            2
+Paul McCartney                                              1
+Sam Smith                                                   2
+Taylor Swift                                                2
+The Doors                                                   1
+The Lunineers                                               2
+The Who                                                     1
+
+17 rows selected. 
+
+SQL> 
+SQL> ----5
+SQL> select bnd_name, mgr_lastname, evt_date_time, venue.ven_name, stf_name, ord_no, vendor.ven_name
+  2  from MIS3376.event join MIS3376.band on band.bnd_id=event.evt_bnd_id
+  3                     join MIS3376.venue on venue.ven_id=event.evt_venue_id
+  4                     join MIS3376.work_schedule on work_schedule.ws_evt_no=event.evt_no
+  5                     join MIS3376.orders on orders.ord_evt_no=event.evt_no
+  6                     join MIS3376.manager on band.bnd_mgno=manager.mgr_mgrno
+  7                     join MIS3376.vendor on orders.ord_ven_no=vendor.ven_no
+  8                     join MIS3376.sxsw_staff on sxsw_staff.stf_id=work_schedule.ws_stf_id
+  9  where venue.ven_name <> 'Stubs';
+
+BND_NAME                                           MGR_LASTNAME    EVT_DATE_ VEN_NAME                                           STF_NAME                  ORD_N VEN_NAME                 
+-------------------------------------------------- --------------- --------- -------------------------------------------------- ------------------------- ----- -------------------------
+Taylor Swift                                       Osbourne        21-MAR-15 ACL Live at the Moody Theater                      Tim Cooke M.              OD002 Sysco                    
+Taylor Swift                                       Osbourne        21-MAR-15 ACL Live at the Moody Theater                      Donna Murphy C.           OD002 Sysco                    
+John Mayer                                         Osbourne        20-MAR-15 Emo"s                                              Julio Montango T.         OD003 Sysco                    
+John Mayer                                         Osbourne        20-MAR-15 Emo"s                                              Donna Murphy C.           OD003 Sysco                    
+Florence and the Machine                           Epstein         19-MAR-15 Austin Convention Center                           Tim Cooke M.              OD004 Sysco                    
+Florence and the Machine                           Epstein         19-MAR-15 Austin Convention Center                           Mary Smith K.             OD004 Sysco                    
+The Lunineers                                      Osbourne        19-MAR-15 Victorian Room at The Driskill                     Dee Jones R.              OD005 Sysco                    
+The Lunineers                                      Osbourne        19-MAR-15 Victorian Room at The Driskill                     Larry Johnson G.          OD005 Sysco                    
+Fall Out Boy                                       Graham          21-MAR-15 Elephant Room                                      Ada Lovelace Z.           OD006 Sysco                    
+Fall Out Boy                                       Graham          21-MAR-15 Elephant Room                                      Danny Jimenez R.          OD006 Sysco                    
+Fall Out Boy                                       Graham          21-MAR-15 Elephant Room                                      Mary Smith K.             OD006 Sysco                    
+Katy Perry                                         Graham          20-MAR-15 ACL Live at the Moody Theater                      Mary Smith K.             OD007 Sysco                    
+Katy Perry                                         Graham          20-MAR-15 ACL Live at the Moody Theater                      Dave Mathews L.           OD007 Sysco                    
+Lady Gaga                                          Parker          21-MAR-15 Austin Convention Center                           Mary Smith K.             OD008 Sysco                    
+Lady Gaga                                          Parker          21-MAR-15 Austin Convention Center                           Dave Mathews L.           OD008 Sysco                    
+The Doors                                          Graham          21-MAR-15 The Velveeta Room                                  Dee Jones R.              OD009 Sysco                    
+The Doors                                          Graham          21-MAR-15 The Velveeta Room                                  Larry Johnson G.          OD009 Sysco                    
+The Who                                            Graham          19-MAR-15 Elephant Room                                      Ada Lovelace Z.           ODO10 Sysco                    
+The Who                                            Graham          19-MAR-15 Elephant Room                                      David Ferety U.           ODO10 Sysco                    
+Paul McCartney                                     Graham          18-MAR-15 Austin Convention Center                           Dee Jones R.              ODO11 Sysco                    
+Paul McCartney                                     Graham          18-MAR-15 Austin Convention Center                           Mary Smith K.             ODO11 Sysco                    
+Maroon 5                                           Epstein         19-MAR-15 Emo"s                                              Ginger Murphy             ODO12 Sysco                    
+Sam Smith                                          Parker          19-MAR-15 Elephant Room                                      Julio Montango T.         ODO13 Sysco                    
+Beyonce                                            Parker          19-MAR-15 ACL Live at the Moody Theater                      Danny Jimenez R.          ODO15 Sysco                    
+Mumfort and Sons                                   Parker          21-MAR-15 Central Presbyterian Church                        Alan Turing P.            ODO16 Sysco                    
+Mumfort and Sons                                   Parker          21-MAR-15 Central Presbyterian Church                        Julio Montango T.         ODO16 Sysco                    
+Iron and Wine                                      Epstein         18-MAR-15 ACL Live at the Moody Theater                      Alan Turing P.            ODO17 Sysco                    
+Iron and Wine                                      Epstein         18-MAR-15 ACL Live at the Moody Theater                      Larry Johnson G.          ODO17 Sysco                    
+John Mayer                                         Osbourne        20-MAR-15 Elephant Room                                      Jeffery Bezos T.          ODO19 Sysco                    
+John Mayer                                         Osbourne        20-MAR-15 Elephant Room                                      Danny Jimenez R.          ODO19 Sysco                    
+John Mayer                                         Osbourne        20-MAR-15 Elephant Room                                      Ginger Murphy             ODO19 Sysco                    
+The Lunineers                                      Osbourne        21-MAR-15 Elephant Room                                      Jeffery Bezos T.          ODO21 Sysco                    
+The Lunineers                                      Osbourne        21-MAR-15 Elephant Room                                      Christine Nguyen H..      ODO21 Sysco                    
+The Lunineers                                      Osbourne        21-MAR-15 Elephant Room                                      Ginger Murphy             ODO21 Sysco                    
+Sam Smith                                          Parker          21-MAR-15 Victorian Room at The Driskill                     Charles Babbage L.        ODO22 Sysco                    
+Sam Smith                                          Parker          21-MAR-15 Victorian Room at The Driskill                     William Gates T.          ODO22 Sysco                    
+Sam Smith                                          Parker          21-MAR-15 Victorian Room at The Driskill                     Julio Montango T.         ODO22 Sysco                    
+Bruno Mars                                         Parker          20-MAR-15 Central Presbyterian Church                        Charles Babbage L.        ODO23 Sysco                    
+Bruno Mars                                         Parker          20-MAR-15 Central Presbyterian Church                        Christine Nguyen H..      ODO23 Sysco                    
+Bruno Mars                                         Parker          20-MAR-15 Central Presbyterian Church                        Larry Johnson G.          ODO23 Sysco                    
+Mumfort and Sons                                   Parker          18-MAR-15 Emo"s                                              Thomas Kahn U.            ODO24 Sysco                    
+Mumfort and Sons                                   Parker          18-MAR-15 Emo"s                                              Ginger Murphy             ODO24 Sysco                    
+Mumfort and Sons                                   Parker          18-MAR-15 Emo"s                                              Dave Mathews L.           ODO24 Sysco                    
+Taylor Swift                                       Osbourne        21-MAR-15 ACL Live at the Moody Theater                      Tim Cooke M.              ODO26 Aramark                  
+Taylor Swift                                       Osbourne        21-MAR-15 ACL Live at the Moody Theater                      Donna Murphy C.           ODO26 Aramark                  
+John Mayer                                         Osbourne        20-MAR-15 Emo"s                                              Julio Montango T.         ODO27 Astec                    
+John Mayer                                         Osbourne        20-MAR-15 Emo"s                                              Donna Murphy C.           ODO27 Astec                    
+Florence and the Machine                           Epstein         19-MAR-15 Austin Convention Center                           Tim Cooke M.              ODO28 Uhall                    
+Florence and the Machine                           Epstein         19-MAR-15 Austin Convention Center                           Mary Smith K.             ODO28 Uhall                    
+The Lunineers                                      Osbourne        19-MAR-15 Victorian Room at The Driskill                     Dee Jones R.              ODO29 Coscto                   
+The Lunineers                                      Osbourne        19-MAR-15 Victorian Room at The Driskill                     Larry Johnson G.          ODO29 Coscto                   
+Fall Out Boy                                       Graham          21-MAR-15 Elephant Room                                      Ada Lovelace Z.           ODO30 Aramark                  
+Fall Out Boy                                       Graham          21-MAR-15 Elephant Room                                      Danny Jimenez R.          ODO30 Aramark                  
+Fall Out Boy                                       Graham          21-MAR-15 Elephant Room                                      Mary Smith K.             ODO30 Aramark                  
+Katy Perry                                         Graham          20-MAR-15 ACL Live at the Moody Theater                      Mary Smith K.             ODO31 Astec                    
+Katy Perry                                         Graham          20-MAR-15 ACL Live at the Moody Theater                      Dave Mathews L.           ODO31 Astec                    
+Lady Gaga                                          Parker          21-MAR-15 Austin Convention Center                           Mary Smith K.             ODO32 Uhall                    
+Lady Gaga                                          Parker          21-MAR-15 Austin Convention Center                           Dave Mathews L.           ODO32 Uhall                    
+The Doors                                          Graham          21-MAR-15 The Velveeta Room                                  Dee Jones R.              ODO33 Coscto                   
+The Doors                                          Graham          21-MAR-15 The Velveeta Room                                  Larry Johnson G.          ODO33 Coscto                   
+The Who                                            Graham          19-MAR-15 Elephant Room                                      Ada Lovelace Z.           ODO34 Aramark                  
+The Who                                            Graham          19-MAR-15 Elephant Room                                      David Ferety U.           ODO34 Aramark                  
+Paul McCartney                                     Graham          18-MAR-15 Austin Convention Center                           Dee Jones R.              ODO35 Astec                    
+Paul McCartney                                     Graham          18-MAR-15 Austin Convention Center                           Mary Smith K.             ODO35 Astec                    
+Maroon 5                                           Epstein         19-MAR-15 Emo"s                                              Ginger Murphy             ODO36 Uhall                    
+Sam Smith                                          Parker          19-MAR-15 Elephant Room                                      Julio Montango T.         ODO37 Coscto                   
+Beyonce                                            Parker          19-MAR-15 ACL Live at the Moody Theater                      Danny Jimenez R.          ODO39 Astec                    
+Mumfort and Sons                                   Parker          21-MAR-15 Central Presbyterian Church                        Alan Turing P.            ODO40 Uhall                    
+Mumfort and Sons                                   Parker          21-MAR-15 Central Presbyterian Church                        Julio Montango T.         ODO40 Uhall                    
+Iron and Wine                                      Epstein         18-MAR-15 ACL Live at the Moody Theater                      Alan Turing P.            ODO41 Coscto                   
+Iron and Wine                                      Epstein         18-MAR-15 ACL Live at the Moody Theater                      Larry Johnson G.          ODO41 Coscto                   
+John Mayer                                         Osbourne        20-MAR-15 Elephant Room                                      Jeffery Bezos T.          ODO43 Astec                    
+John Mayer                                         Osbourne        20-MAR-15 Elephant Room                                      Danny Jimenez R.          ODO43 Astec                    
+John Mayer                                         Osbourne        20-MAR-15 Elephant Room                                      Ginger Murphy             ODO43 Astec                    
+The Lunineers                                      Osbourne        21-MAR-15 Elephant Room                                      Jeffery Bezos T.          ODO45 Coscto                   
+The Lunineers                                      Osbourne        21-MAR-15 Elephant Room                                      Christine Nguyen H..      ODO45 Coscto                   
+The Lunineers                                      Osbourne        21-MAR-15 Elephant Room                                      Ginger Murphy             ODO45 Coscto                   
+Sam Smith                                          Parker          21-MAR-15 Victorian Room at The Driskill                     Charles Babbage L.        ODO46 Aramark                  
+Sam Smith                                          Parker          21-MAR-15 Victorian Room at The Driskill                     William Gates T.          ODO46 Aramark                  
+Sam Smith                                          Parker          21-MAR-15 Victorian Room at The Driskill                     Julio Montango T.         ODO46 Aramark                  
+Bruno Mars                                         Parker          20-MAR-15 Central Presbyterian Church                        Charles Babbage L.        ODO47 Astec                    
+Bruno Mars                                         Parker          20-MAR-15 Central Presbyterian Church                        Christine Nguyen H..      ODO47 Astec                    
+Bruno Mars                                         Parker          20-MAR-15 Central Presbyterian Church                        Larry Johnson G.          ODO47 Astec                    
+Mumfort and Sons                                   Parker          18-MAR-15 Emo"s                                              Thomas Kahn U.            ODO48 Uhall                    
+Mumfort and Sons                                   Parker          18-MAR-15 Emo"s                                              Ginger Murphy             ODO48 Uhall                    
+Mumfort and Sons                                   Parker          18-MAR-15 Emo"s                                              Dave Mathews L.           ODO48 Uhall                    
+Taylor Swift                                       Osbourne        21-MAR-15 ACL Live at the Moody Theater                      Tim Cooke M.              ODO50 Aramark                  
+Taylor Swift                                       Osbourne        21-MAR-15 ACL Live at the Moody Theater                      Donna Murphy C.           ODO50 Aramark                  
+John Mayer                                         Osbourne        20-MAR-15 Emo"s                                              Julio Montango T.         ODO51 Astec                    
+John Mayer                                         Osbourne        20-MAR-15 Emo"s                                              Donna Murphy C.           ODO51 Astec                    
+Florence and the Machine                           Epstein         19-MAR-15 Austin Convention Center                           Tim Cooke M.              ODO52 Uhall                    
+Florence and the Machine                           Epstein         19-MAR-15 Austin Convention Center                           Mary Smith K.             ODO52 Uhall                    
+The Lunineers                                      Osbourne        19-MAR-15 Victorian Room at The Driskill                     Dee Jones R.              ODO53 Coscto                   
+The Lunineers                                      Osbourne        19-MAR-15 Victorian Room at The Driskill                     Larry Johnson G.          ODO53 Coscto                   
+Fall Out Boy                                       Graham          21-MAR-15 Elephant Room                                      Ada Lovelace Z.           ODO54 Aramark                  
+Fall Out Boy                                       Graham          21-MAR-15 Elephant Room                                      Danny Jimenez R.          ODO54 Aramark                  
+Fall Out Boy                                       Graham          21-MAR-15 Elephant Room                                      Mary Smith K.             ODO54 Aramark                  
+Katy Perry                                         Graham          20-MAR-15 ACL Live at the Moody Theater                      Mary Smith K.             ODO55 Astec                    
+Katy Perry                                         Graham          20-MAR-15 ACL Live at the Moody Theater                      Dave Mathews L.           ODO55 Astec                    
+Lady Gaga                                          Parker          21-MAR-15 Austin Convention Center                           Mary Smith K.             ODO56 Uhall                    
+Lady Gaga                                          Parker          21-MAR-15 Austin Convention Center                           Dave Mathews L.           ODO56 Uhall                    
+The Doors                                          Graham          21-MAR-15 The Velveeta Room                                  Dee Jones R.              ODO57 Coscto                   
+The Doors                                          Graham          21-MAR-15 The Velveeta Room                                  Larry Johnson G.          ODO57 Coscto                   
+The Who                                            Graham          19-MAR-15 Elephant Room                                      Ada Lovelace Z.           ODO58 Aramark                  
+The Who                                            Graham          19-MAR-15 Elephant Room                                      David Ferety U.           ODO58 Aramark                  
+Paul McCartney                                     Graham          18-MAR-15 Austin Convention Center                           Dee Jones R.              ODO59 Astec                    
+Paul McCartney                                     Graham          18-MAR-15 Austin Convention Center                           Mary Smith K.             ODO59 Astec                    
+Maroon 5                                           Epstein         19-MAR-15 Emo"s                                              Ginger Murphy             ODO60 Uhall                    
+Sam Smith                                          Parker          19-MAR-15 Elephant Room                                      Julio Montango T.         ODO61 Coscto                   
+Beyonce                                            Parker          19-MAR-15 ACL Live at the Moody Theater                      Danny Jimenez R.          ODO63 Astec                    
+Mumfort and Sons                                   Parker          21-MAR-15 Central Presbyterian Church                        Alan Turing P.            ODO64 Uhall                    
+Mumfort and Sons                                   Parker          21-MAR-15 Central Presbyterian Church                        Julio Montango T.         ODO64 Uhall                    
+Iron and Wine                                      Epstein         18-MAR-15 ACL Live at the Moody Theater                      Alan Turing P.            ODO65 Coscto                   
+Iron and Wine                                      Epstein         18-MAR-15 ACL Live at the Moody Theater                      Larry Johnson G.          ODO65 Coscto                   
+John Mayer                                         Osbourne        20-MAR-15 Elephant Room                                      Jeffery Bezos T.          ODO67 Astec                    
+John Mayer                                         Osbourne        20-MAR-15 Elephant Room                                      Danny Jimenez R.          ODO67 Astec                    
+John Mayer                                         Osbourne        20-MAR-15 Elephant Room                                      Ginger Murphy             ODO67 Astec                    
+The Lunineers                                      Osbourne        21-MAR-15 Elephant Room                                      Jeffery Bezos T.          ODO69 Coscto                   
+The Lunineers                                      Osbourne        21-MAR-15 Elephant Room                                      Christine Nguyen H..      ODO69 Coscto                   
+The Lunineers                                      Osbourne        21-MAR-15 Elephant Room                                      Ginger Murphy             ODO69 Coscto                   
+Sam Smith                                          Parker          21-MAR-15 Victorian Room at The Driskill                     Charles Babbage L.        ODO70 Aramark                  
+Sam Smith                                          Parker          21-MAR-15 Victorian Room at The Driskill                     William Gates T.          ODO70 Aramark                  
+Sam Smith                                          Parker          21-MAR-15 Victorian Room at The Driskill                     Julio Montango T.         ODO70 Aramark                  
+Bruno Mars                                         Parker          20-MAR-15 Central Presbyterian Church                        Charles Babbage L.        ODO71 Astec                    
+Bruno Mars                                         Parker          20-MAR-15 Central Presbyterian Church                        Christine Nguyen H..      ODO71 Astec                    
+Bruno Mars                                         Parker          20-MAR-15 Central Presbyterian Church                        Larry Johnson G.          ODO71 Astec                    
+Mumfort and Sons                                   Parker          18-MAR-15 Emo"s                                              Thomas Kahn U.            ODO72 Uhall                    
+Mumfort and Sons                                   Parker          18-MAR-15 Emo"s                                              Ginger Murphy             ODO72 Uhall                    
+Mumfort and Sons                                   Parker          18-MAR-15 Emo"s                                              Dave Mathews L.           ODO72 Uhall                    
+Taylor Swift                                       Osbourne        21-MAR-15 ACL Live at the Moody Theater                      Tim Cooke M.              ODO74 Aramark                  
+Taylor Swift                                       Osbourne        21-MAR-15 ACL Live at the Moody Theater                      Donna Murphy C.           ODO74 Aramark                  
+John Mayer                                         Osbourne        20-MAR-15 Emo"s                                              Julio Montango T.         ODO75 Astec                    
+John Mayer                                         Osbourne        20-MAR-15 Emo"s                                              Donna Murphy C.           ODO75 Astec                    
+Florence and the Machine                           Epstein         19-MAR-15 Austin Convention Center                           Tim Cooke M.              ODO76 Uhall                    
+Florence and the Machine                           Epstein         19-MAR-15 Austin Convention Center                           Mary Smith K.             ODO76 Uhall                    
+The Lunineers                                      Osbourne        19-MAR-15 Victorian Room at The Driskill                     Dee Jones R.              ODO77 Coscto                   
+The Lunineers                                      Osbourne        19-MAR-15 Victorian Room at The Driskill                     Larry Johnson G.          ODO77 Coscto                   
+Fall Out Boy                                       Graham          21-MAR-15 Elephant Room                                      Ada Lovelace Z.           ODO78 Aramark                  
+Fall Out Boy                                       Graham          21-MAR-15 Elephant Room                                      Danny Jimenez R.          ODO78 Aramark                  
+Fall Out Boy                                       Graham          21-MAR-15 Elephant Room                                      Mary Smith K.             ODO78 Aramark                  
+Katy Perry                                         Graham          20-MAR-15 ACL Live at the Moody Theater                      Mary Smith K.             ODO79 Astec                    
+Katy Perry                                         Graham          20-MAR-15 ACL Live at the Moody Theater                      Dave Mathews L.           ODO79 Astec                    
+Lady Gaga                                          Parker          21-MAR-15 Austin Convention Center                           Mary Smith K.             ODO80 Uhall                    
+Lady Gaga                                          Parker          21-MAR-15 Austin Convention Center                           Dave Mathews L.           ODO80 Uhall                    
+The Doors                                          Graham          21-MAR-15 The Velveeta Room                                  Dee Jones R.              ODO81 Coscto                   
+The Doors                                          Graham          21-MAR-15 The Velveeta Room                                  Larry Johnson G.          ODO81 Coscto                   
+
+146 rows selected. 
+
+SQL> 
+SQL> ----6
+SQL> select *
+  2  from MIS3376.vendor
+  3  where ven_name not like '%o'
+  4  order by 1 asc;
+
+VEN_N VEN_NAME                  VEN_STREET                VEN_CITY             VE VEN_Z VEN_PNONE  VEN_FAX   
+----- ------------------------- ------------------------- -------------------- -- ----- ---------- ----------
+VN103 Aramark                   444 Red Ruver             Austin               TX 78799 5123335555 5129938899
+VN104 Astec                     123 Dean Keaton St        Austin               TX 78788 5123335555 5122238899
+VN105 Uhall                     123 Speedway              Austin               TX 78700 5123330000 5123448899
+
+SQL> 
+SQL> ----7
+SQL> select stf_name, round((sysdate - stf_dob)/365,0) as "Age"
+  2  from MIS3376.sxsw_staff
+  3  where stf_dob=(select max(stf_dob) from MIS3376.sxsw_staff) and stf_title <> 'Assistant';
+
+STF_NAME                         Age
+------------------------- ----------
+Dee Jones R.                      36
+
+SQL> 
+SQL> ----8
+SQL> select stf_id, stf_name, stf_salary as "Salary"
+  2  from MIS3376.sxsw_staff
+  3  where stf_name not like '%.'
+  4  order by 1 asc;
+
+STF_I STF_NAME                      Salary
+----- ------------------------- ----------
+S033  Ginger Murphy                   2650
+
+SQL> 
+SQL> ----9
+SQL> select stf_name as "Staff Name", sys_connect_by_path (stf_name, '/') as "Organizational Position"
+  2  from sxsw_staff
+  3  connect by prior stf_id=stf_sup_id;
+
+Staff Name
+-------------------------
+Organizational Position                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Dee Jones R.              
+/Dee Jones R.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+
+Alan Turing P.            
+/Alan Turing P.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
+William Gates T.          
+/William Gates T.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+Samual Yu N.              
+/Samual Yu N.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+
+Dave Mathews L.           
+/Dave Mathews L.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+Mary Smith K.             
+/Dave Mathews L./Mary Smith K.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+Jeffery Bezos T.          
+/Dave Mathews L./Jeffery Bezos T.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+Ada Lovelace Z.           
+/Dave Mathews L./Ada Lovelace Z.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+Thomas Kahn U.            
+/Dave Mathews L./Thomas Kahn U.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
+Ginger Murphy             
+/Dave Mathews L./Ginger Murphy                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+Larry Johnson G.          
+/Dave Mathews L./Larry Johnson G.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+David Ferety U.           
+/David Ferety U.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+Julio Montango T.         
+/David Ferety U./Julio Montango T.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+Charles Babbage L.        
+/David Ferety U./Charles Babbage L.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+
+Tim Cooke M.              
+/David Ferety U./Tim Cooke M.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+
+Danny Jimenez R.          
+/David Ferety U./Danny Jimenez R.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+Mohammed Bang M.          
+/David Ferety U./Mohammed Bang M.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+Dee Jones R.              
+/David Ferety U./Mohammed Bang M./Dee Jones R.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+Alan Turing P.            
+/David Ferety U./Mohammed Bang M./Alan Turing P.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+William Gates T.          
+/David Ferety U./Mohammed Bang M./William Gates T.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+Samual Yu N.              
+/David Ferety U./Mohammed Bang M./Samual Yu N.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+Christine Nguyen H..      
+/David Ferety U./Christine Nguyen H..                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+Julio Montango T.         
+/Julio Montango T.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+Charles Babbage L.        
+/Charles Babbage L.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+
+Tim Cooke M.              
+/Tim Cooke M.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+
+Danny Jimenez R.          
+/Danny Jimenez R.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+Mohammed Bang M.          
+/Mohammed Bang M.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+Dee Jones R.              
+/Mohammed Bang M./Dee Jones R.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+Alan Turing P.            
+/Mohammed Bang M./Alan Turing P.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+William Gates T.          
+/Mohammed Bang M./William Gates T.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+Samual Yu N.              
+/Mohammed Bang M./Samual Yu N.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+Christine Nguyen H..      
+/Christine Nguyen H..                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+Mary Smith K.             
+/Mary Smith K.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+Jeffery Bezos T.          
+/Jeffery Bezos T.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+Ada Lovelace Z.           
+/Ada Lovelace Z.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+Thomas Kahn U.            
+/Thomas Kahn U.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
+Ginger Murphy             
+/Ginger Murphy                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+Larry Johnson G.          
+/Larry Johnson G.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+Donna Murphy C.           
+/Donna Murphy C.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+Dave Mathews L.           
+/Donna Murphy C./Dave Mathews L.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+Mary Smith K.             
+/Donna Murphy C./Dave Mathews L./Mary Smith K.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+Jeffery Bezos T.          
+/Donna Murphy C./Dave Mathews L./Jeffery Bezos T.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+Ada Lovelace Z.           
+/Donna Murphy C./Dave Mathews L./Ada Lovelace Z.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+Thomas Kahn U.            
+/Donna Murphy C./Dave Mathews L./Thomas Kahn U.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
+Ginger Murphy             
+/Donna Murphy C./Dave Mathews L./Ginger Murphy                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+Larry Johnson G.          
+/Donna Murphy C./Dave Mathews L./Larry Johnson G.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+David Ferety U.           
+/Donna Murphy C./David Ferety U.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+Julio Montango T.         
+/Donna Murphy C./David Ferety U./Julio Montango T.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+Charles Babbage L.        
+/Donna Murphy C./David Ferety U./Charles Babbage L.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+
+Tim Cooke M.              
+/Donna Murphy C./David Ferety U./Tim Cooke M.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+
+Danny Jimenez R.          
+/Donna Murphy C./David Ferety U./Danny Jimenez R.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+Mohammed Bang M.          
+/Donna Murphy C./David Ferety U./Mohammed Bang M.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+
+Dee Jones R.              
+/Donna Murphy C./David Ferety U./Mohammed Bang M./Dee Jones R.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+Alan Turing P.            
+/Donna Murphy C./David Ferety U./Mohammed Bang M./Alan Turing P.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
+William Gates T.          
+/Donna Murphy C./David Ferety U./Mohammed Bang M./William Gates T.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+
+Samual Yu N.              
+/Donna Murphy C./David Ferety U./Mohammed Bang M./Samual Yu N.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+
+Christine Nguyen H..      
+/Donna Murphy C./David Ferety U./Christine Nguyen H..                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+
+57 rows selected. 
+
+SQL> 
+SQL> ----10
+SQL> select lpad('   ', 3*(level-1))||stf_name as "Staff Name"
+  2  from sxsw_staff
+  3  start with stf_id = 'S002'
+  4  connect by prior stf_id=stf_sup_id;
+
+Staff Name                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Donna Murphy C.
+   David Ferety U.
+      Mohammed Bang M.
+         Dee Jones R.
+         Alan Turing P.
+         William Gates T.
+         Samual Yu N.
+      Christine Nguyen H..
+      Charles Babbage L.
+      Julio Montango T.
+      Danny Jimenez R.
+      Tim Cooke M.
+   Dave Mathews L.
+      Mary Smith K.
+      Ginger Murphy
+      Larry Johnson G.
+      Ada Lovelace Z.
+      Jeffery Bezos T.
+      Thomas Kahn U.
+
+19 rows selected. 
+

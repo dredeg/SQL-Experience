@@ -1,0 +1,230 @@
+SQL> set echo on;
+SQL> set linesize 1000;
+SQL> set pagesize 1000;
+SQL> set heading on;
+SQL> 
+SQL> --- Assignment2
+SQL> 
+SQL> ----1
+SQL> select ven_name, count(evt_no) as "Number of Events"
+  2  from MIS3376.venue join MIS3376.event on event.evt_venue_id=venue.ven_id
+  3  having count(evt_no) >= 1
+  4  group by ven_name;
+
+VEN_NAME                                           Number of Events
+-------------------------------------------------- ----------------
+Austin Convention Center                                          3
+Elephant Room                                                     5
+Central Presbyterian Church                                       2
+ACL Live at the Moody Theater                                     4
+Victorian Room at The Driskill                                    2
+Emo"s                                                             3
+The Velveeta Room                                                 1
+Stubs                                                             4
+
+8 rows selected. 
+
+SQL> 
+SQL> ----2(contains a correlated subquery)
+SQL> select stf_id, stf_name, stf_salary, stf_title
+  2  from MIS3376.sxsw_staff
+  3  where stf_salary >= (select max(stf_salary) 
+  4          from MIS3376.sxsw_staff 
+  5          where stf_title <> 'Event Coordinator') ;
+
+STF_I STF_NAME                  STF_SALARY STF_TITLE                
+----- ------------------------- ---------- -------------------------
+S071  Jeffery Bezos T.                7500 Usher                    
+
+SQL> 
+SQL> ----3
+SQL> select bnd_name, bnd_fee, bnd_type
+  2  from MIS3376.band b1
+  3  where b1.bnd_fee > (select avg(bnd_fee) from MIS3376.band b2 where b1.bnd_type = b2.bnd_type);
+
+BND_NAME                                              BND_FEE BND_T
+-------------------------------------------------- ---------- -----
+Taylor Swift                                          2000000 Pop  
+Florence and the Machine                               450000 Indy 
+The Lunineers                                          100000 Folk 
+Katy Perry                                            1500000 Pop  
+Lady Gaga                                             1500000 Pop  
+Paul McCartney                                        1500000 Rock 
+Beyonce                                               2000000 Pop  
+
+7 rows selected. 
+
+SQL> 
+SQL> ----4
+SQL> select stf_name, round((sysdate - stf_dob)/365,0) as "Age in Years", round((sysdate - stf_hiredate),0) as "Employment in Days"
+  2  from MIS3376.sxsw_staff
+  3  order by 3 desc;
+
+STF_NAME                  Age in Years Employment in Days
+------------------------- ------------ ------------------
+Donna Murphy C.                                     11481
+Dave Mathews L.                     43               8670
+Ada Lovelace Z.                     41               5689
+David Ferety U.                     41               5536
+Thomas Kahn U.                      39               5528
+Mohammed Bang M.                    52               5527
+Christine Nguyen H..                41               5464
+Julio Montango T.                   37               5458
+William Gates T.                    38               4697
+Danny Jimenez R.                    37               4602
+Mary Smith K.                       39               4577
+Larry Johnson G.                    41               4574
+Alan Turing P.                      52               4569
+Tim Cooke M.                        37               4564
+Charles Babbage L.                  64               4508
+Jeffery Bezos T.                    53               4505
+Ginger Murphy                       43               4494
+Dee Jones R.                        36               4471
+Samual Yu N.                        49               4462
+
+19 rows selected. 
+
+SQL> 
+SQL> ----5
+SQL> select extract(year from stf_dob) as "Year",count(extract(year from stf_dob)) as "# Staff Born"
+  2  from MIS3376.sxsw_staff
+  3  where extract(year from stf_dob) is not null
+  4  group by extract(year from stf_dob)
+  5  order by 1 asc;
+
+      Year # Staff Born
+---------- ------------
+      1955            1
+      1966            3
+      1970            1
+      1975            2
+      1977            2
+      1978            2
+      1980            3
+      1981            2
+      1982            1
+      1983            1
+
+10 rows selected. 
+
+SQL> 
+SQL> ----6
+SQL> select substr(stf_name,1,instr(stf_name,' '))||''|| --first name
+  2          substr(stf_name,instr(stf_name, '.')-1,2)||' '|| --middle initial
+  3          substr(stf_name, instr(stf_name,' ',1)+1,instr(stf_name,' ',1,2) - instr(stf_name,' ',1,1)) --last name
+  4      as "Name of Staff"
+  5  from MIS3376.sxsw_staff
+  6  where stf_name like '%.'
+  7  UNION
+  8  select stf_name
+  9  from MIS3376.sxsw_staff
+ 10  where stf_name not like '%.';
+
+Name of Staff                                        
+-----------------------------------------------------
+Ada Z. Lovelace 
+Alan P. Turing 
+Charles L. Babbage 
+Christine H. Nguyen 
+Danny R. Jimenez 
+Dave L. Mathews 
+David U. Ferety 
+Dee R. Jones 
+Donna C. Murphy 
+Ginger Murphy
+Jeffery T. Bezos 
+Julio T. Montango 
+Larry G. Johnson 
+Mary K. Smith 
+Mohammed M. Bang 
+Samual N. Yu 
+Thomas U. Kahn 
+Tim M. Cooke 
+William T. Gates 
+
+19 rows selected. 
+
+SQL> 
+SQL> ----7
+SQL> select stf_email, length(stf_email) as "Length of Email Address", substr(stf_email,1,instr(stf_email,'@')-1) as "Characters Preceding the @"
+  2  from MIS3376.sxsw_staff
+  3  order by 2 desc;
+
+STF_EMAIL                 Length of Email Address Characters Preceding the 
+------------------------- ----------------------- -------------------------
+GMURPHY@WORLDSBESTDOG.COM                      25 GMURPHY                  
+ALOVELACE@FIRSTPGRMR.COM                       24 ALOVELACE                
+CBABBAGE@ANLYENGINE.COM                        23 CBABBAGE                 
+DFERETY@GOLFCHANNEL.COM                        23 DFERETY                  
+JMO@CONOCOPHILLIPS.COM                         22 JMO                      
+DCMURPHY@BAUER.UH.EDU                          21 DCMURPHY                 
+DMATTHERS@MUSIC.COM                            19 DMATTHERS                
+ATURNING@GENIUS.COM                            19 ATURNING                 
+LJOHNSON@GMAIL.COM                             18 LJOHNSON                 
+CNGUYEN@GMAIL.COM                              17 CNGUYEN                  
+JBEZOS@AMAZON.COM                              17 JBEZOS                   
+MSMITH@GMAIL.COM                               16 MSMITH                   
+MBANG@GMAIL.COM                                15 MBANG                    
+TCOOK@APPLE.COM                                15 TCOOK                    
+TCOOK@APPLE.COM                                15 TCOOK                    
+DJONES@ATT.NET                                 14 DJONES                   
+WGATES@MS.COM                                  13 WGATES                   
+TKAN@ATT.NET                                   12 TKAN                     
+SYU@ATT.NET                                    11 SYU                      
+
+19 rows selected. 
+
+SQL> 
+SQL> ----8
+SQL> select stf_name, decode(stf_phone, null, 'No Phone Available','('||substr(stf_phone, 1, 3)||')'||substr(stf_phone, 4, 3)||'-'||substr(stf_phone, 6, 4)) as "Phone Number"
+  2  from MIS3376.sxsw_staff;
+
+STF_NAME                  Phone Number      
+------------------------- ------------------
+Donna Murphy C.           (713)298-8731     
+Dave Mathews L.           (512)298-8731     
+Mary Smith K.             (713)298-8781     
+Larry Johnson G.          (713)298-8732     
+David Ferety U.           (512)298-8631     
+Ginger Murphy             (737)298-8731     
+Julio Montango T.         (512)298-8731     
+Christine Nguyen H..      (512)298-8731     
+Mohammed Bang M.          (512)987-7322     
+Danny Jimenez R.          (737)298-8731     
+Thomas Kahn U.            (737)298-8732     
+Tim Cooke M.              (737)298-8735     
+Dee Jones R.              No Phone Available
+Samual Yu N.              (737)123-3456     
+William Gates T.          (713)123-3456     
+Alan Turing P.            (713)222-2222     
+Ada Lovelace Z.           (713)333-3333     
+Charles Babbage L.        (713)444-4444     
+Jeffery Bezos T.          (713)555-5555     
+
+19 rows selected. 
+
+SQL> 
+SQL> ----9
+SQL> select ven_name, sum(ord_unitprice * ord_amount) as "Total Value", count(ord_no) as "# Orders"
+  2  from MIS3376.vendor join MIS3376.orders on orders.ord_ven_no = vendor.ven_no
+  3  group by ven_name;
+
+VEN_NAME                  Total Value   # Orders
+------------------------- ----------- ----------
+Uhall                           10500         14
+Astec                           56000         14
+Aramark                         84000         14
+Sysco                          331240         24
+Coscto                         900000         15
+
+SQL> 
+SQL> ----10
+SQL> select ven_name
+  2  from MIS3376.vendor
+  3  where not exists(select * from MIS3376.event where not exists (select * from MIS3376.orders
+  4                                                                  where ven_no=ord_ven_no and evt_no=ord_evt_no));
+
+VEN_NAME                 
+-------------------------
+Sysco
+

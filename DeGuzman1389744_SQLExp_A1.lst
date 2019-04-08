@@ -1,0 +1,395 @@
+SQL> set echo on;
+SQL> set linesize 1000;
+SQL> set pagesize 1000;
+SQL> set heading on;
+SQL> 
+SQL> --- Assignment1
+SQL> 
+SQL> ----1
+SQL> select stf_id, stf_name, stf_title, stf_hiredate, stf_salary as "Annual Salary"
+  2  from MIS3376.SXSW_STAFF
+  3  order by stf_id;
+
+STF_I STF_NAME                  STF_TITLE                 STF_HIRED Annual Salary
+----- ------------------------- ------------------------- --------- -------------
+S001  Mohammed Bang M.          Event Coordinator         10-OCT-03          1535
+S002  Donna Murphy C.           Event Coordinator         22-JUN-87          2000
+S006  Dee Jones R.              Event Staff               31-AUG-06           800
+S016  Christine Nguyen H..      Event Staff               12-DEC-03          1500
+S021  Mary Smith K.             Event Staff               17-MAY-06          2149
+S025  David Ferety U.           Event Staff               01-OCT-03          1900
+S029  Alan Turing P.            Usher                     25-MAY-06          2500
+S031  Charles Babbage L.        Usher                     25-JUL-06          2195
+S033  Ginger Murphy             Event Staff               08-AUG-06          2650
+S034  Larry Johnson G.          Event Staff               20-MAY-06          2500
+S043  Ada Lovelace Z.           Event Programmer          01-MAY-03          2500
+S044  Julio Montango T.         Event Supervisor          18-DEC-03          3400
+S048  Danny Jimenez R.          Usher                     22-APR-06          2000
+S050  Tim Cooke M.              Security Staff            30-MAY-06          1950
+S066  William Gates T.          Head Usher                17-JAN-06           900
+S071  Jeffery Bezos T.          Usher                     28-JUL-06          7500
+S077  Thomas Kahn U.            Security Supervisor       09-OCT-03          2050
+S093  Dave Mathews L.           Event Supervisor          03-MAR-95          1250
+S095  Samual Yu N.              Security Staff            09-SEP-06          1260
+
+19 rows selected. 
+
+SQL> 
+SQL> ----2
+SQL> select bnd_name, ven_name, evt_date_time, evt_duration
+  2  from MIS3376.Band 
+  3      FULL OUTER JOIN MIS3376.Event on Band.bnd_id=event.evt_bnd_id 
+  4      FULL OUTER JOIN MIS3376.Venue on venue.ven_id=event.evt_venue_id
+  5  order by ven_name, evt_date_time;
+
+BND_NAME                                           VEN_NAME                                           EVT_DATE_ EVT_DURATION
+-------------------------------------------------- -------------------------------------------------- --------- ------------
+Iron and Wine                                      ACL Live at the Moody Theater                      18-MAR-15            2
+Beyonce                                            ACL Live at the Moody Theater                      19-MAR-15            3
+Katy Perry                                         ACL Live at the Moody Theater                      20-MAR-15            3
+Taylor Swift                                       ACL Live at the Moody Theater                      21-MAR-15            3
+Paul McCartney                                     Austin Convention Center                           18-MAR-15            3
+Florence and the Machine                           Austin Convention Center                           19-MAR-15            2
+Lady Gaga                                          Austin Convention Center                           21-MAR-15            3
+Bruno Mars                                         Central Presbyterian Church                        20-MAR-15            2
+Mumfort and Sons                                   Central Presbyterian Church                        21-MAR-15            2
+Sam Smith                                          Elephant Room                                      19-MAR-15            2
+The Who                                            Elephant Room                                      19-MAR-15            2
+John Mayer                                         Elephant Room                                      20-MAR-15            2
+Fall Out Boy                                       Elephant Room                                      21-MAR-15            3
+The Lunineers                                      Elephant Room                                      21-MAR-15            3
+Mumfort and Sons                                   Emo"s                                              18-MAR-15            2
+Maroon 5                                           Emo"s                                              19-MAR-15            2
+John Mayer                                         Emo"s                                              20-MAR-15            2
+Taylor Swift                                       Stubs                                              18-MAR-15            3
+Iron and Wine                                      Stubs                                              19-MAR-15            2
+Florence and the Machine                           Stubs                                              19-MAR-15            2
+Bruno Mars                                         Stubs                                              21-MAR-15            2
+The Doors                                          The Velveeta Room                                  21-MAR-15            2
+                                                   Trulucks                                                                 
+The Lunineers                                      Victorian Room at The Driskill                     19-MAR-15            2
+Sam Smith                                          Victorian Room at The Driskill                     21-MAR-15            2
+Lyle Lovett and His Large Band                                                                                              
+
+26 rows selected. 
+
+SQL> 
+SQL> ----3
+SQL> select ven_name, evt_date_time, stf_name, TO_CHAR(ws_start_time,'HH:MI AM') as "Start Time", TO_CHAR(ws_end_time,'HH:MI AM') as "End Time", ws_role
+  2  from MIS3376.Venue FULL OUTER JOIN MIS3376.Event on venue.ven_id=event.evt_venue_id
+  3      FULL OUTER JOIN MIS3376.Work_Schedule on work_schedule.ws_evt_no=event.evt_no
+  4      FULL OUTER JOIN MIS3376.sxsw_staff on work_schedule.ws_stf_id=stf_id
+  5  order by evt_date_time, stf_name;
+
+VEN_NAME                                           EVT_DATE_ STF_NAME                  Start Ti End Time WS_ROLE                  
+-------------------------------------------------- --------- ------------------------- -------- -------- -------------------------
+Stubs                                              18-MAR-15 David Ferety U.           03:00 PM 11:00 PM Event Staff              
+Stubs                                              18-MAR-15 William Gates T.          03:00 PM 11:00 PM Head Usher               
+Emo"s                                              18-MAR-15 Dave Mathews L.           05:00 PM 10:00 PM Event Coordinatior       
+Emo"s                                              18-MAR-15 Ginger Murphy             05:00 PM 10:00 PM Event Coordinatior       
+Emo"s                                              18-MAR-15 Thomas Kahn U.            05:00 PM 10:00 PM Security Coordinator     
+ACL Live at the Moody Theater                      18-MAR-15 Alan Turing P.            06:30 PM 11:30 PM Usher                    
+Austin Convention Center                           18-MAR-15 Dee Jones R.              06:30 PM 11:30 PM Event Staff              
+ACL Live at the Moody Theater                      18-MAR-15 Larry Johnson G.          06:30 PM 11:30 PM Event Coordinatior       
+Austin Convention Center                           18-MAR-15 Mary Smith K.             06:30 PM 11:30 PM Event Staff              
+Elephant Room                                      19-MAR-15 Julio Montango T.         05:00 PM 11:00 PM Event Supervisor         
+Elephant Room                                      19-MAR-15 Ada Lovelace Z.           06:00 PM 11:00 PM Event Staff              
+Stubs                                              19-MAR-15 Christine Nguyen H..      06:00 PM 11:00 PM Event Staff              
+ACL Live at the Moody Theater                      19-MAR-15 Danny Jimenez R.          06:00 PM 11:00 PM Event Staff              
+Elephant Room                                      19-MAR-15 David Ferety U.           06:00 PM 11:00 PM Event Coordinatior       
+Victorian Room at The Driskill                     19-MAR-15 Dee Jones R.              06:00 PM 10:00 PM Event Staff              
+Stubs                                              19-MAR-15 Donna Murphy C.           06:00 PM 11:00 PM Event Coordinatior       
+Emo"s                                              19-MAR-15 Ginger Murphy             06:00 PM 10:00 PM Event Coordinatior       
+Victorian Room at The Driskill                     19-MAR-15 Larry Johnson G.          06:00 PM 10:00 PM Event Staff              
+Stubs                                              19-MAR-15 Dave Mathews L.           06:30 PM 10:30 PM Event Coordinatior       
+Stubs                                              19-MAR-15 Jeffery Bezos T.          06:30 PM 10:30 PM Unher                    
+Austin Convention Center                           19-MAR-15 Mary Smith K.             06:30 PM 10:30 PM Event Staff              
+Stubs                                              19-MAR-15 Thomas Kahn U.            06:30 PM 10:30 PM Event Staff              
+Austin Convention Center                           19-MAR-15 Tim Cooke M.              06:30 PM 10:30 PM Security Coordinator     
+Central Presbyterian Church                        20-MAR-15 Charles Babbage L.        04:00 PM 10:00 PM Usher                    
+Central Presbyterian Church                        20-MAR-15 Christine Nguyen H..      04:00 PM 10:00 PM Event Staff              
+Central Presbyterian Church                        20-MAR-15 Larry Johnson G.          04:00 PM 10:00 PM Event Staff              
+Elephant Room                                      20-MAR-15 Danny Jimenez R.          06:00 PM 11:00 PM Event Coordinatior       
+Elephant Room                                      20-MAR-15 Ginger Murphy             06:00 PM 11:00 PM Event Coordinatior       
+Elephant Room                                      20-MAR-15 Jeffery Bezos T.          06:00 PM 11:00 PM Usher                    
+ACL Live at the Moody Theater                      20-MAR-15 Dave Mathews L.           06:00 PM 11:30 PM Event Coordinatior       
+Emo"s                                              20-MAR-15 Donna Murphy C.           06:00 PM 10:00 PM Event Coordinatior       
+Emo"s                                              20-MAR-15 Julio Montango T.         06:00 PM 10:00 PM Event Supervisor         
+ACL Live at the Moody Theater                      20-MAR-15 Mary Smith K.             06:00 PM 11:30 PM Event Staff              
+Central Presbyterian Church                        21-MAR-15 Alan Turing P.            04:00 PM 10:00 PM Usher                    
+Central Presbyterian Church                        21-MAR-15 Julio Montango T.         04:00 PM 10:00 PM Event Supervisor         
+Elephant Room                                      21-MAR-15 Ada Lovelace Z.           05:00 PM 11:00 PM Event Staff              
+Elephant Room                                      21-MAR-15 Danny Jimenez R.          05:00 PM 11:00 PM Event Staff              
+ACL Live at the Moody Theater                      21-MAR-15 Donna Murphy C.           05:00 PM 10:00 PM Event Coordinatior       
+Elephant Room                                      21-MAR-15 Mary Smith K.             05:00 PM 11:00 PM Event Staff              
+ACL Live at the Moody Theater                      21-MAR-15 Tim Cooke M.              05:00 PM 10:00 PM Security Coordinatior    
+Victorian Room at The Driskill                     21-MAR-15 Charles Babbage L.        06:00 PM 11:00 PM Usher                    
+Austin Convention Center                           21-MAR-15 Dave Mathews L.           06:00 PM 11:30 PM Event Coordinatior       
+Stubs                                              21-MAR-15 David Ferety U.           06:00 PM 11:00 PM Event Coordinatior       
+The Velveeta Room                                  21-MAR-15 Dee Jones R.              06:00 PM 11:00 PM Event Staff              
+Victorian Room at The Driskill                     21-MAR-15 Julio Montango T.         06:00 PM 11:00 PM Event Coordinatior       
+The Velveeta Room                                  21-MAR-15 Larry Johnson G.          06:00 PM 11:00 PM Event Staff              
+Austin Convention Center                           21-MAR-15 Mary Smith K.             06:00 PM 11:30 PM Event Coordinatior       
+Stubs                                              21-MAR-15 Thomas Kahn U.            06:00 PM 11:00 PM Event Staff              
+Victorian Room at The Driskill                     21-MAR-15 William Gates T.          06:00 PM 11:00 PM Head Usher               
+Elephant Room                                      21-MAR-15 Christine Nguyen H..      06:30 PM 10:30 PM Event Staff              
+Elephant Room                                      21-MAR-15 Ginger Murphy             06:30 PM 10:30 PM Event Coordinatior       
+Elephant Room                                      21-MAR-15 Jeffery Bezos T.          06:30 PM 10:30 PM Usher                    
+                                                             Mohammed Bang M.                                                     
+                                                             Samual Yu N.                                                         
+Trulucks                                                                                                                          
+
+55 rows selected. 
+
+SQL> 
+SQL> ----4
+SQL> select * 
+  2  from MIS3376.sxsw_staff
+  3  where stf_hiredate BETWEEN to_date('01-Jan-03') and to_date('31-Dec-06')
+  4  order by stf_hiredate;
+
+STF_I STF_NAME                  STF_STREET                STF_CITY             ST STF_Z STF_PHONE  STF_SALARY STF_EMAIL                 STF_TITLE                 STF_HIRED STF_DOB   STF_S
+----- ------------------------- ------------------------- -------------------- -- ----- ---------- ---------- ------------------------- ------------------------- --------- --------- -----
+S043  Ada Lovelace Z.           2919 Northview            Missouri City        TX 77459 713333333        2500 ALOVELACE@FIRSTPGRMR.COM  Event Programmer          01-MAY-03 02-OCT-77 S093 
+S025  David Ferety U.           19123 Fairway Drive       Atascocita           TX 77346 5122986315       1900 DFERETY@GOLFCHANNEL.COM   Event Staff               01-OCT-03 01-MAY-78 S002 
+S077  Thomas Kahn U.            3423 East 34th Street     Houston              TX 77008 7372987322       2050 TCOOK@APPLE.COM           Security Supervisor       09-OCT-03 29-MAY-80 S093 
+S001  Mohammed Bang M.          634 El Pintado Road       Wimberly             TX 78560 512987322        1535 MBANG@GMAIL.COM           Event Coordinator         10-OCT-03 31-OCT-66 S025 
+S016  Christine Nguyen H..      106 Colonial Way          Brenham              TX 77833 5122987311       1500 CNGUYEN@GMAIL.COM         Event Staff               12-DEC-03 20-DEC-77 S025 
+S044  Julio Montango T.         16 Longleaf Lane          Houston              TX 77024 5122987310       3400 JMO@CONOCOPHILLIPS.COM    Event Supervisor          18-DEC-03 16-JUN-81 S025 
+S066  William Gates T.          500 Quail Circle          Dickinson            TX 77539 7131234567        900 WGATES@MS.COM             Head Usher                17-JAN-06 29-AUG-80 S001 
+S048  Danny Jimenez R.          1259 Joshua Lane          Houston              TX 77055 7372987310       2000 TKAN@ATT.NET              Usher                     22-APR-06 20-DEC-81 S025 
+S021  Mary Smith K.             608 Jackson Hill          Houston              TX 77002 7132987815       2149 MSMITH@GMAIL.COM          Event Staff               17-MAY-06 12-MAY-80 S093 
+S034  Larry Johnson G.          2525 Westgate             Houston              TX 77025 7132987320       2500 LJOHNSON@GMAIL.COM        Event Staff               20-MAY-06 01-MAY-78 S093 
+S029  Alan Turing P.            2003 Sandpiper            League City          TX 77573 7132222222       2500 ATURNING@GENIUS.COM       Usher                     25-MAY-06 29-JUL-66 S001 
+S050  Tim Cooke M.              13342 Herring Drive       Sugar Land           TX 77479 7372987355       1950 TCOOK@APPLE.COM           Security Staff            30-MAY-06 29-MAY-82 S025 
+S031  Charles Babbage L.        2222 Maroneal             Houston              TX 77030 7134444444       2195 CBABBAGE@ANLYENGINE.COM   Usher                     25-JUL-06 29-MAY-55 S025 
+S071  Jeffery Bezos T.          6512 Vanderbilt           Houston              TX 77005 713555555        7500 JBEZOS@AMAZON.COM         Usher                     28-JUL-06 09-MAY-66 S093 
+S033  Ginger Murphy             6405 Buffalo Speedway     Houston              TX 77005 7372987315       2650 GMURPHY@WORLDSBESTDOG.COM Event Staff               08-AUG-06 16-DEC-75 S093 
+S006  Dee Jones R.              11732 Sea Shore Drive     Humble               TX 77346                   800 DJONES@ATT.NET            Event Staff               31-AUG-06 02-MAY-83 S001 
+S095  Samual Yu N.              3710 Cypresswood Drive    Houston              TX 77070 7371234567       1260 SYU@ATT.NET               Security Staff            09-SEP-06 29-MAY-70 S001 
+
+17 rows selected. 
+
+SQL> 
+SQL> ----5
+SQL> select ord_item, count(ord_no) as "#ordered", sum(ord_unit_price*ord_amount) as "Total"
+  2  from MIS3376.orders
+  3  group by ord_item;
+
+ORD_ITEM                    #ordered      Total
+------------------------- ---------- ----------
+Concessions                       24      18840
+Truck Rentals                     14         84
+Food                              15     150000
+Rentals                           14       5600
+Supplies                          14      42000
+
+SQL> 
+SQL> ----6
+SQL> select bnd_name
+  2  from MIS3376.band
+  3  where bnd_id in (select bnd_id from MIS3376.band
+  4                      MINUS
+  5                  select evt_bnd_id from MIS3376.event);
+
+BND_NAME                                          
+--------------------------------------------------
+Lyle Lovett and His Large Band
+
+SQL> 
+SQL> ----7
+SQL> select evt_date_time, evt_budget, ven_name, bnd_name, mgr_firstname, mgr_lastname, bus_name as "Sponsor"
+  2  from MIS3376.Event 
+  3      FULL OUTER JOIN MIS3376.Business_Sponsor on Event.evt_bus_id=Business_Sponsor.bus_id
+  4      FULL OUTER JOIN MIS3376.Venue on Venue.ven_id=Event.evt_venue_id
+  5      FULL OUTER JOIN MIS3376.Band on Event.evt_bnd_id=Band.bnd_id
+  6      FULL OUTER JOIN MIS3376.Manager on Manager.mgr_mgrno=Band.bnd_mgno
+  7  order by evt_date_time, bnd_name;
+
+EVT_DATE_ EVT_BUDGET VEN_NAME                                           BND_NAME                                           MGR_FIRSTNAM MGR_LASTNAME    Sponsor                                           
+--------- ---------- -------------------------------------------------- -------------------------------------------------- ------------ --------------- --------------------------------------------------
+18-MAR-15    2500000 Stubs                                              Taylor Swift                                       Sharon       Osbourne        NPR                                               
+18-MAR-15     300000 Emo"s                                              Mumfort and Sons                                   Colonel Tom  Parker          PepsiCo                                           
+18-MAR-15      25000 ACL Live at the Moody Theater                      Iron and Wine                                      Brian        Epstein         Budwiser                                          
+18-MAR-15    2000000 Austin Convention Center                           Paul McCartney                                     Bill         Graham          Google                                            
+19-MAR-15      60000 Elephant Room                                      Sam Smith                                          Colonel Tom  Parker          NPR                                               
+19-MAR-15    2500000 ACL Live at the Moody Theater                      Beyonce                                            Colonel Tom  Parker          Google                                            
+19-MAR-15      25000 Stubs                                              Iron and Wine                                      Brian        Epstein         ATT                                               
+19-MAR-15     600000 Emo"s                                              Maroon 5                                           Brian        Epstein         PepsiCo                                           
+19-MAR-15     150000 Victorian Room at The Driskill                     The Lunineers                                      Sharon       Osbourne        PepsiCo                                           
+19-MAR-15      55000 Elephant Room                                      The Who                                            Bill         Graham          PepsiCo                                           
+19-MAR-15     650000 Austin Convention Center                           Florence and the Machine                           Brian        Epstein         NPR                                               
+19-MAR-15     650000 Stubs                                              Florence and the Machine                           Brian        Epstein         NPR                                               
+20-MAR-15    1500000 Central Presbyterian Church                        Bruno Mars                                         Colonel Tom  Parker          PepsiCo                                           
+20-MAR-15     900000 Elephant Room                                      John Mayer                                         Sharon       Osbourne        Google                                            
+20-MAR-15     900000 Emo"s                                              John Mayer                                         Sharon       Osbourne        Budwiser                                          
+20-MAR-15    2000000 ACL Live at the Moody Theater                      Katy Perry                                         Bill         Graham          NPR                                               
+21-MAR-15     300000 Central Presbyterian Church                        Mumfort and Sons                                   Colonel Tom  Parker          NPR                                               
+21-MAR-15     250000 Elephant Room                                      Fall Out Boy                                       Bill         Graham          ATT                                               
+21-MAR-15    2500000 ACL Live at the Moody Theater                      Taylor Swift                                       Sharon       Osbourne        Google                                            
+21-MAR-15    1500000 Stubs                                              Bruno Mars                                         Colonel Tom  Parker          ATT                                               
+21-MAR-15    2000000 Austin Convention Center                           Lady Gaga                                          Colonel Tom  Parker          Google                                            
+21-MAR-15      60000 Victorian Room at The Driskill                     Sam Smith                                          Colonel Tom  Parker          NPR                                               
+21-MAR-15      55000 The Velveeta Room                                  The Doors                                          Bill         Graham          NPR                                               
+21-MAR-15     150000 Elephant Room                                      The Lunineers                                      Sharon       Osbourne        Budwiser                                          
+                                                                        Lyle Lovett and His Large Band                     Colonel Tom  Parker                                                            
+                     Trulucks                                                                                                                                                                             
+                                                                                                                           Kelly        Graham                                                            
+
+27 rows selected. 
+
+SQL> 
+SQL> ----8
+SQL> select bnd_id, bnd_name, count(evt_no) as "# Events Scheduled"
+  2  from MIS3376.Event FULL OUTER JOIN MIS3376.Band on Band.bnd_id=Event.evt_bnd_id
+  3  group by bnd_id, bnd_name
+  4  having count(evt_no) >= 1;
+
+BND_I BND_NAME                                           # Events Scheduled
+----- -------------------------------------------------- ------------------
+BD105 The Lunineers                                                       2
+BD113 Sam Smith                                                           2
+BD108 Lady Gaga                                                           1
+BD104 Florence and the Machine                                            2
+BD106 Fall Out Boy                                                        1
+BD107 Katy Perry                                                          1
+BD109 The Doors                                                           1
+BD111 Paul McCartney                                                      1
+BD115 Beyonce                                                             1
+BD116 Mumfort and Sons                                                    2
+BD103 John Mayer                                                          2
+BD112 Maroon 5                                                            1
+BD114 Bruno Mars                                                          2
+BD101 Iron and Wine                                                       2
+BD102 Taylor Swift                                                        2
+BD110 The Who                                                             1
+
+16 rows selected. 
+
+SQL> 
+SQL> ----9
+SQL> select mgr_mgrno, mgr_firstname, mgr_lastname, count(bnd_mgno) as "Bands Managed"
+  2  from MIS3376.Manager FULL OUTER JOIN MIS3376.Band on Manager.mgr_mgrno=Band.bnd_mgno
+  3  group by mgr_mgrno, mgr_firstname, mgr_lastname
+  4  order by mgr_mgrno;
+
+MGR_ MGR_FIRSTNAM MGR_LASTNAME    Bands Managed
+---- ------------ --------------- -------------
+M001 Bill         Graham                      5
+M002 Colonel Tom  Parker                      6
+M003 Brian        Epstein                     3
+M004 Sharon       Osbourne                    3
+M005 Kelly        Graham                      0
+
+SQL> 
+SQL> ----10
+SQL> select *
+  2  from MIS3376.Manager
+  3  where mgr_address LIKE '%CA';
+
+MGR_ MGR_FIRSTNAM MGR_LASTNAME    MGR_MIDINITI MGR_ADDRESS                                        MGR_PHONE           
+---- ------------ --------------- ------------ -------------------------------------------------- --------------------
+M001 Bill         Graham          P            1234 Haight Ashbury, San Francisco  CA             415-123-4567        
+M004 Sharon       Osbourne        K            334 Crazy Street, Los Angeles  CA                  213-663-1237        
+
+SQL> 
+SQL> ----11
+SQL> select b.mgr_firstname, b.mgr_lastname
+  2  from MIS3376.Manager a, MIS3376.Manager b
+  3  where a.mgr_lastname=b.mgr_lastname
+  4  and a.mgr_firstname<>b.mgr_firstname;
+
+MGR_FIRSTNAM MGR_LASTNAME   
+------------ ---------------
+Bill         Graham         
+Kelly        Graham         
+
+SQL> 
+SQL> ----12
+SQL> select *
+  2  from MIS3376.sxsw_staff
+  3  where stf_title = 'Event Coordinator' AND stf_dob is NULL
+  4  Union
+  5  select *
+  6  from MIS3376.sxsw_staff
+  7  where stf_title = 'Event Supervisor' AND stf_dob is NULL;
+
+STF_I STF_NAME                  STF_STREET                STF_CITY             ST STF_Z STF_PHONE  STF_SALARY STF_EMAIL                 STF_TITLE                 STF_HIRED STF_DOB   STF_S
+----- ------------------------- ------------------------- -------------------- -- ----- ---------- ---------- ------------------------- ------------------------- --------- --------- -----
+S002  Donna Murphy C.           4706 Jason                Houston              TX 77035 7132987315       2000 DCMURPHY@BAUER.UH.EDU     Event Coordinator         22-JUN-87                
+
+SQL> 
+SQL> ----13
+SQL> select ven_name, avg(evt_budget), max(evt_budget), min(evt_budget)
+  2  from MIS3376.Venue FULL OUTER JOIN MIS3376.Event on Venue.ven_id=Event.evt_venue_id
+  3  group by ven_name;
+
+VEN_NAME                                           AVG(EVT_BUDGET) MAX(EVT_BUDGET) MIN(EVT_BUDGET)
+-------------------------------------------------- --------------- --------------- ---------------
+Austin Convention Center                                   1550000         2000000          650000
+Trulucks                                                                                          
+Elephant Room                                               283000          900000           55000
+Central Presbyterian Church                                 900000         1500000          300000
+ACL Live at the Moody Theater                              1756250         2500000           25000
+Victorian Room at The Driskill                              105000          150000           60000
+Emo"s                                                       600000          900000          300000
+The Velveeta Room                                            55000           55000           55000
+Stubs                                                      1168750         2500000           25000
+
+9 rows selected. 
+
+SQL> 
+SQL> ----14
+SQL> select stf_title, TO_CHAR(AVG(stf_salary), '$99,999')
+  2  from MIS3376.sxsw_staff
+  3  group by stf_title;
+
+STF_TITLE                 TO_CHAR(
+------------------------- --------
+Head Usher                    $900
+Event Staff                 $1,917
+Usher                       $3,549
+Event Programmer            $2,500
+Event Supervisor            $2,325
+Event Coordinator           $1,768
+Security Supervisor         $2,050
+Security Staff              $1,605
+
+8 rows selected. 
+
+SQL> 
+SQL> ----15
+SQL> select ven_name, evt_date_time, evt_duration
+  2  from MIS3376.Event FULL OUTER JOIN MIS3376.Venue on Venue.ven_id=Event.evt_venue_id
+  3  order by ven_name, evt_date_time;
+
+VEN_NAME                                           EVT_DATE_ EVT_DURATION
+-------------------------------------------------- --------- ------------
+ACL Live at the Moody Theater                      18-MAR-15            2
+ACL Live at the Moody Theater                      19-MAR-15            3
+ACL Live at the Moody Theater                      20-MAR-15            3
+ACL Live at the Moody Theater                      21-MAR-15            3
+Austin Convention Center                           18-MAR-15            3
+Austin Convention Center                           19-MAR-15            2
+Austin Convention Center                           21-MAR-15            3
+Central Presbyterian Church                        20-MAR-15            2
+Central Presbyterian Church                        21-MAR-15            2
+Elephant Room                                      19-MAR-15            2
+Elephant Room                                      19-MAR-15            2
+Elephant Room                                      20-MAR-15            2
+Elephant Room                                      21-MAR-15            3
+Elephant Room                                      21-MAR-15            3
+Emo"s                                              18-MAR-15            2
+Emo"s                                              19-MAR-15            2
+Emo"s                                              20-MAR-15            2
+Stubs                                              18-MAR-15            3
+Stubs                                              19-MAR-15            2
+Stubs                                              19-MAR-15            2
+Stubs                                              21-MAR-15            2
+The Velveeta Room                                  21-MAR-15            2
+Trulucks                                                                 
+Victorian Room at The Driskill                     19-MAR-15            2
+Victorian Room at The Driskill                     21-MAR-15            2
+
+25 rows selected. 
+
